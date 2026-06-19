@@ -1,48 +1,102 @@
 # T-cell proliferation models for CFSE-like data
 
-Refactored research code for simulating and fitting T-cell proliferation models used in the AIMS Ghana Master's thesis:
+Research code from my Master's project at the African Institute for Mathematical Sciences (AIMS Ghana):
 
 > Chilperic Armel Foko Kuate. *Reverse-engineering of T cell proliferation dynamic*. AIMS Ghana, 2016.
 
-The repository focuses on two models used in the thesis analysis:
+This repository contains R implementations for simulating and fitting mathematical models of T-cell proliferation using CFSE-like generation-count data. The project connects mathematical biology, immune-cell population dynamics, parameter estimation, and reproducible scientific computing.
 
-- **Smith-Martin model**: a delayed differential-equation model for generation-structured proliferation.
-- **Cyton model**: an analytic implementation under exponential waiting-time assumptions for division and death.
+## Models
 
-The original scripts were preserved under `legacy/original_R_scripts/`. The refactored code is under `R/`.
+The repository focuses on two model classes used in the thesis:
 
-## Why this refactor exists
+* **Smith-Martin model** — generation-structured proliferation with delayed division dynamics.
+* **Cyton model** — analytic proliferation model using exponential waiting-time assumptions for division and death.
 
-The thesis appendix code was written as exploratory research code. It mixed model definitions, data loading, fitting, plotting, global variables, absolute paths, and interactive commands. That structure is normal during a thesis but weak for GitHub publication.
+The original thesis scripts are preserved in `legacy/original_R_scripts/`. The reusable implementation is organized in `R/`.
 
-This version separates:
+## What this repository demonstrates
 
-- model simulation,
-- data input and reshaping,
-- parameter fitting,
-- metrics,
-- plotting,
-- reproducible scripts.
+This project documents an early stage of my research work in computational biology and mathematical modelling. It shows a complete research workflow connecting:
 
-## Repository layout
+* biological assumptions,
+* mathematical model formulation,
+* simulation of CFSE-like synthetic data,
+* parameter estimation,
+* model comparison,
+* reproducible implementation,
+* restructuring of exploratory research code into a usable scientific codebase.
+
+## Software architecture
+
+The repository is organized as a reproducible modelling pipeline. The architecture separates data handling, model simulation, parameter fitting, evaluation, plotting, and execution scripts.
+
+```mermaid
+flowchart TD
+    A[Raw CFSE-like synthetic data] --> B[Data loading and reshaping]
+    B --> C1[Smith-Martin model]
+    B --> C2[Cyton model]
+
+    C1 --> D[Model simulation]
+    C2 --> D
+
+    D --> E[Parameter fitting]
+    E --> F[Model predictions]
+    F --> G[Error metrics]
+    F --> H[Plots and diagnostics]
+    G --> I[Model comparison]
+    H --> I
+
+    J[Docker / local R setup] --> K[Reproducible scripts]
+    K --> B
+    K --> C1
+    K --> C2
+    K --> E
+
+    L[Tests] --> B
+    L --> C1
+    L --> C2
+    L --> G
+```
+
+### Main components
+
+| Component             | File(s)                                      | Role                                                                                       |
+| --------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Data layer            | `R/cfse_data.R`                              | Reads CFSE-like generation-count files and converts raw columns into model-ready matrices. |
+| Smith-Martin model    | `R/smith_martin.R`                           | Simulates generation-structured T-cell proliferation with delayed division dynamics.       |
+| Cyton model           | `R/cyton.R`                                  | Simulates the analytic Cyton model under exponential waiting-time assumptions.             |
+| Fitting layer         | `R/fit.R`                                    | Provides utilities for fitting model parameters to observed generation-count data.         |
+| Metrics layer         | `R/metrics.R`                                | Computes error measures such as SSD and average relative error.                            |
+| Plotting layer        | `R/plot.R`                                   | Provides plotting helpers for model output and diagnostics.                                |
+| Execution layer       | `scripts/`                                   | Contains runnable workflows for simulation, fitting, and comparison.                       |
+| Reproducibility layer | `Dockerfile`, `tools/`, `.github/workflows/` | Provides Docker execution, local setup, project checks, and CI smoke testing.              |
+| Provenance layer      | `legacy/original_R_scripts/`                 | Preserves the original thesis scripts without editing them.                                |
+
+## Repository structure
 
 ```text
 tcell-proliferation-models/
-├── R/                         # refactored functions
-├── scripts/                   # reproducible examples
+├── R/                         # core model, fitting, metric, and plotting functions
+├── scripts/                   # executable workflows and examples
 ├── data/synthetic_cfse/        # synthetic CFSE-like datasets from the thesis project
-├── legacy/original_R_scripts/  # original unedited R scripts
-├── tests/                     # lightweight tests
-├── docs/                      # audit and model notes
+├── legacy/original_R_scripts/  # original thesis scripts kept for provenance
+├── tests/                     # lightweight checks for core functions
+├── docs/                      # model notes and audit notes
+├── tools/                     # setup and project validation scripts
+├── .github/workflows/          # GitHub Actions smoke test
+├── Dockerfile                 # reproducible R runtime
+├── docker-compose.yml
+├── INSTALL.md
 ├── DESCRIPTION
 ├── NAMESPACE
 ├── CITATION.cff
 └── LICENSE
 ```
 
-## Installation / setup
+## Reproducibility
 
-For reproducible local execution, use the Docker environment included in this repository:
+The repository includes a Docker-based R environment so the examples can be run without depending on a local R installation.
 
 ```bash
 docker build -t tcell-proliferation-models:r-4.4.3 .
@@ -56,9 +110,30 @@ chmod +x tools/install_r_ubuntu_24_04.sh
 ./tools/install_r_ubuntu_24_04.sh
 ```
 
-Detailed instructions are in [`INSTALL.md`](INSTALL.md).
+Additional setup details are in `INSTALL.md`.
 
-To run without installing the package, source the functions from the repository root:
+The reproducibility layer includes:
+
+* Docker-based execution,
+* local installation scripts,
+* executable example workflows,
+* lightweight tests,
+* GitHub Actions smoke testing,
+* preserved original scripts for provenance,
+* included synthetic datasets,
+* removal of private absolute paths from the reusable code.
+
+## How to use the repository
+
+From the repository root, run the example workflows:
+
+```bash
+Rscript scripts/01_simulate_smith_martin.R
+Rscript scripts/02_simulate_cyton.R
+Rscript scripts/03_fit_models.R
+```
+
+To use the functions interactively in R without installing the package:
 
 ```r
 source("R/cfse_data.R")
@@ -68,6 +143,15 @@ source("R/cyton.R")
 source("R/fit.R")
 source("R/plot.R")
 ```
+
+A typical workflow is:
+
+1. Load CFSE-like generation-count data.
+2. Select a model: Smith-Martin or Cyton.
+3. Simulate generation trajectories for a chosen parameter set.
+4. Fit model parameters against observed or synthetic data.
+5. Evaluate the fit using error metrics.
+6. Plot predictions and compare models.
 
 ## Minimal Smith-Martin example
 
@@ -132,38 +216,30 @@ predicted <- simulate_cyton(
 ssd(observed, predicted)
 ```
 
-## Reproducing example scripts
+## Data
 
-From the repository root:
+The files in `data/synthetic_cfse/` are synthetic CFSE-like datasets generated during the thesis project using an individual-based simulation.
 
-```bash
-Rscript scripts/01_simulate_smith_martin.R
-Rscript scripts/02_simulate_cyton.R
-Rscript scripts/03_fit_models.R
-```
+Each row corresponds to a sampled time point. Each generation has two columns, such as `N0d` and `N0p`; `read_cfse_counts()` converts them into total generation counts `N0`, `N1`, and so on.
 
-The fitting script uses only a few random starts by default so that it runs quickly. Increase `n_starts` for a serious reproduction.
+## Scientific note
 
-## Important modelling caveat
-
-The exploratory Smith-Martin scripts used the survival factor `exp(-d_0 * delta)` for all delayed terms. The thesis equations distinguish `exp(-d_0 * delta)` for generation zero and `exp(-d * delta)` for later generations. The refactored function uses the equation-consistent convention by default.
-
-To reproduce the exploratory script convention, call:
+The Smith-Martin implementation uses the equation-consistent delayed survival convention by default. To reproduce the convention used in the exploratory thesis scripts, call:
 
 ```r
 simulate_smith_martin(params, legacy_survival = TRUE)
 ```
 
-Do not hide this distinction in a publication-quality repository. It changes the scientific interpretation.
-
-## Data
-
-The files in `data/synthetic_cfse/` are synthetic CFSE-like outputs generated from an individual-based simulation during the thesis project. Each row corresponds to a sampled time point. Each generation has two columns, such as `N0d` and `N0p`; `read_cfse_counts()` sums them into total generation counts `N0`, `N1`, ... .
+This distinction is kept explicit because it affects the scientific interpretation of the model.
 
 ## Citation
 
-Use the information in `CITATION.cff`. If the repository is archived on Zenodo, replace the placeholder repository URL and add the DOI.
+If you use or refer to this repository, cite:
 
-## License and authorship warning
+> Foko Kuate, C. A. (2016). *Reverse-engineering of T cell proliferation dynamic*. Master's thesis, AIMS Ghana.
 
-A MIT license file is included as a practical default. Before publishing, verify that every non-trivial contribution is yours to license. In particular, the legacy Cyton file contains the comment `modified code by Lamin`; clarify attribution before public release.
+Repository citation metadata is provided in `CITATION.cff`.
+
+## License and provenance
+
+This repository includes an MIT license. The original thesis scripts are preserved for provenance in `legacy/original_R_scripts/`. Before extending or redistributing legacy components, check authorship comments in the original files.
