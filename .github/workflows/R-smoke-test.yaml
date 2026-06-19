@@ -1,0 +1,15 @@
+name: R smoke test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  docker-smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build reproducible R container
+        run: docker build -t tcell-proliferation-models:r-4.4.3 .
+      - name: Run smoke tests
+        run: docker run --rm tcell-proliferation-models:r-4.4.3

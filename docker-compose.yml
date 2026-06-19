@@ -1,0 +1,6 @@
+services:
+  tcellprolif:
+    build: .
+    image: tcell-proliferation-models:r-4.4.3
+    working_dir: /workspace/tcell-proliferation-models
+    command: Rscript tools/check-project.R

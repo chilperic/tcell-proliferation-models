@@ -1,0 +1,16 @@
+{
+  "name": "tcell-proliferation-models R 4.4.3",
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "context": ".."
+  },
+  "workspaceFolder": "/workspace/tcell-proliferation-models",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "REditorSupport.r",
+        "RDebugger.r-debugger"
+      ]
+    }
+  }
+}
