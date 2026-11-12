@@ -2,12 +2,11 @@
 # Smoke-test the repository after installation.
 # This deliberately avoids interactive plotting and long optimization runs.
 
-`%||%` <- function(x, y) if (is.null(x)) y else x
-script_file <- sys.frame(1)$ofile %||% "tools/check-project.R"
-root <- normalizePath(file.path(dirname(script_file), ".."), mustWork = FALSE)
-if (!dir.exists(file.path(root, "R"))) {
-  root <- normalizePath(getwd(), mustWork = TRUE)
-}
+script_arg <- grep("^--file=", commandArgs(trailingOnly = FALSE), value = TRUE)
+root <- if (length(script_arg)) {
+  normalizePath(file.path(dirname(sub("^--file=", "", script_arg[[1L]])), ".."), mustWork = TRUE)
+} else normalizePath(getwd(), mustWork = TRUE)
+if (!dir.exists(file.path(root, "R"))) stop("Cannot locate repository root")
 setwd(root)
 
 message("Repository root: ", getwd())
