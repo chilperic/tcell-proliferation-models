@@ -13,6 +13,7 @@ setwd(root)
 message("Repository root: ", getwd())
 message("R version: ", R.version.string)
 
+source("R/validation.R")
 source("R/cfse_data.R")
 source("R/metrics.R")
 source("R/smith_martin.R")

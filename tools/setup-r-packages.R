@@ -8,7 +8,7 @@
 repo <- Sys.getenv("CRAN_REPO", unset = getOption("repos")[["CRAN"]])
 options(repos = c(CRAN = repo))
 
-required <- c("deSolve", "testthat")
+required <- c("deSolve", "testthat", "jsonlite", "digest")
 installed <- rownames(installed.packages())
 missing <- setdiff(required, installed)
 

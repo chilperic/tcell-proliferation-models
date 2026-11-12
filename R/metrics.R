@@ -12,7 +12,11 @@ ssd <- function(observed, predicted, weights = 1) {
   if (!identical(dim(observed), dim(predicted))) {
     stop("Observed and predicted matrices must have identical dimensions.", call. = FALSE)
   }
-  sum(weights * (observed - predicted)^2, na.rm = TRUE)
+  if (!length(observed) || any(!is.finite(observed)) || any(!is.finite(predicted)))
+    stop("Counts must be nonempty and finite", call. = FALSE)
+  if (!(length(weights) == 1L || identical(dim(weights), dim(observed))) || any(!is.finite(weights)) || any(weights < 0))
+    stop("Weights must be nonnegative finite scalar or a matrix matching counts", call. = FALSE)
+  sum(weights * (observed - predicted)^2)
 }
 
 #' Average relative error.
@@ -37,6 +41,8 @@ average_relative_error <- function(true, estimated, eps = .Machine$double.eps) {
     }
   }
 
+  if (!length(true) || any(!is.finite(true)) || !length(estimated) || any(!is.finite(estimated)) || length(eps) != 1L || !is.finite(eps) || eps <= 0)
+    stop("Finite nonempty parameters and positive finite eps required", call. = FALSE)
   denom <- pmax(abs(true), eps)
   colMeans(abs(sweep(estimated, 2L, true, `-`)) / matrix(denom, nrow = nrow(estimated), ncol = length(true), byrow = TRUE)) * 100
 }

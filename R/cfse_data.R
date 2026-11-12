@@ -35,6 +35,7 @@ read_cfse_counts <- function(path, initial_cells = 50000, times = NULL, max_gene
 #' @inheritParams read_cfse_counts
 #' @return A numeric matrix with a `times` attribute.
 prepare_cfse_counts <- function(data, initial_cells = 50000, times = NULL, max_generation = NULL) {
+  .validate_initial(1L, initial_cells)
   if (!is.data.frame(data)) {
     data <- as.data.frame(data)
   }
@@ -47,6 +48,7 @@ prepare_cfse_counts <- function(data, initial_cells = 50000, times = NULL, max_g
     }
   }
 
+  if (nrow(data) == 0L || anyDuplicated(names(data))) stop("Empty data or duplicate columns")
   generation_ids <- sort(unique(as.integer(sub("^N([0-9]+)[dp]$", "\\1", grep("^N[0-9]+[dp]$", names(data), value = TRUE)))))
   generation_ids <- generation_ids[!is.na(generation_ids)]
 
@@ -58,6 +60,8 @@ prepare_cfse_counts <- function(data, initial_cells = 50000, times = NULL, max_g
     generation_ids <- generation_ids[generation_ids <= max_generation]
   }
 
+  if (!length(generation_ids) || !identical(generation_ids, seq.int(0L, max(generation_ids))))
+    stop("Generations must be contiguous starting at zero", call. = FALSE)
   counts <- vapply(generation_ids, function(g) {
     death_col <- paste0("N", g, "d")
     proliferating_col <- paste0("N", g, "p")
@@ -65,7 +69,9 @@ prepare_cfse_counts <- function(data, initial_cells = 50000, times = NULL, max_g
     if (length(missing) > 0L) {
       stop("Missing column(s): ", paste(missing, collapse = ", "), call. = FALSE)
     }
-    as.numeric(data[[death_col]]) + as.numeric(data[[proliferating_col]])
+    pair <- cbind(data[[death_col]], data[[proliferating_col]])
+    if (!is.numeric(pair) || any(!is.finite(pair)) || any(pair < 0)) stop("Counts must be finite and nonnegative")
+    rowSums(pair)
   }, numeric(nrow(data)))
 
   counts <- as.matrix(counts)
@@ -85,6 +91,7 @@ prepare_cfse_counts <- function(data, initial_cells = 50000, times = NULL, max_g
     stop("The time vector length must match the number of data rows after prepending time zero.", call. = FALSE)
   }
 
+  times <- .validate_times(times)
   rownames(counts) <- as.character(times)
   attr(counts, "times") <- times
   counts
@@ -101,9 +108,9 @@ read_average_cfse_counts <- function(paths, initial_cells = 50000, max_generatio
   }
   matrices <- lapply(paths, read_cfse_counts, initial_cells = initial_cells, max_generation = max_generation)
   template_dim <- dim(matrices[[1L]])
-  ok <- vapply(matrices, function(x) identical(dim(x), template_dim), logical(1L))
+  ok <- vapply(matrices, function(x) identical(dim(x), template_dim) && identical(dimnames(x), dimnames(matrices[[1L]])) && identical(attr(x, "times"), attr(matrices[[1L]], "times")), logical(1L))
   if (!all(ok)) {
-    stop("All datasets must reshape to the same dimensions before averaging.", call. = FALSE)
+    stop("All datasets must reshape to the same generations and times before averaging.", call. = FALSE)
   }
   out <- Reduce(`+`, matrices) / length(matrices)
   attr(out, "times") <- attr(matrices[[1L]], "times")

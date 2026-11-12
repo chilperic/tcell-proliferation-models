@@ -31,7 +31,7 @@ The legacy name `deltat` is accepted and internally normalized to `delta`.
 
 ## Cyton model
 
-The refactored Cyton implementation preserves the analytic exponential-waiting-time formulas from the legacy scripts, but removes global dependence on `N`, `ngen`, and `t_pts`.
+Version 0.2 defaults to a stable exponential competing-risk ODE. The historical analytic formula is retained with method="legacy". See [migration notes](MIGRATION-0.2.md).
 
 The parameter vector is:
 

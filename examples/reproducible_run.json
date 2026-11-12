@@ -1,0 +1,8 @@
+{
+  "model": "cyton",
+  "parameters": {"f0": 1, "f1": 0.8, "mu0d": 430, "mud": 23, "mu0p": 53, "mup": 17},
+  "times": [0, 12, 24, 48, 72, 96, 120],
+  "initial_cells": 50000,
+  "max_generation": 20,
+  "purpose": "Illustrative synthetic simulation, not an empirical refit"
+}

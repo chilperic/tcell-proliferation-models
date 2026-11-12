@@ -9,7 +9,7 @@
 #' @param initial_cells Initial number of generation-zero cells.
 #' @return Named numeric vector.
 smith_martin_initial_state <- function(max_generation = 20, initial_cells = 50000) {
-  stopifnot(max_generation >= 1L, initial_cells >= 0)
+  .validate_initial(max_generation, initial_cells)
   state <- numeric(2L * (max_generation + 1L))
   names(state) <- c(paste0("NA", 0:max_generation), paste0("N", 0:max_generation))
   state[c("NA0", "N0")] <- initial_cells
@@ -28,7 +28,10 @@ normalize_smith_martin_params <- function(params) {
   if (length(missing) > 0L) {
     stop("Missing Smith-Martin parameter(s): ", paste(missing, collapse = ", "), call. = FALSE)
   }
-  params[required]
+  params <- params[required]
+  if (any(!is.finite(params)) || any(params < 0) || params[["delta"]] <= 0)
+    stop("Smith-Martin rates must be nonnegative and delta positive", call. = FALSE)
+  params
 }
 
 #' Simulate the Smith-Martin DDE model.
@@ -42,18 +45,24 @@ normalize_smith_martin_params <- function(params) {
 #'   used in the exploratory thesis scripts, where `exp(-d_0 * delta)` is used
 #'   for all delayed terms. If `FALSE`, use `exp(-d_0 * delta)` for generation
 #'   zero and `exp(-d * delta)` for later generations, matching the model equations.
+#' @param history Pre-zero A-phase history: constant (legacy) or zero (synchronized initial cells).
+#' @param rtol Relative solver tolerance.
+#' @param atol Absolute solver tolerance.
 #' @return Numeric matrix with generation counts as columns.
 simulate_smith_martin <- function(params,
                                   times = seq(0, 120, by = 12),
                                   initial_cells = 50000,
                                   max_generation = 20,
-                                  legacy_survival = FALSE) {
+                                  legacy_survival = FALSE,
+                                  history = c("constant", "zero"), rtol = 1e-8, atol = 1e-8) {
   if (!requireNamespace("deSolve", quietly = TRUE)) {
     stop("Package `deSolve` is required for simulate_smith_martin().", call. = FALSE)
   }
 
   params <- normalize_smith_martin_params(params)
-  times <- sort(unique(as.numeric(times)))
+  times <- .validate_times(times)
+  history <- match.arg(history)
+  if (!is.finite(rtol) || rtol <= 0 || !is.finite(atol) || atol <= 0) stop("Positive finite tolerances required")
   state0 <- smith_martin_initial_state(max_generation, initial_cells)
   g <- as.integer(max_generation)
 
@@ -65,7 +74,7 @@ simulate_smith_martin <- function(params,
     delta <- parms[["delta"]]
 
     lag_a <- if (t < delta) {
-      state0[seq_len(g + 1L)]
+      if (history == "constant") state0[seq_len(g + 1L)] else numeric(g + 1L)
     } else {
       deSolve::lagvalue(t - delta)[seq_len(g + 1L)]
     }
@@ -96,9 +105,12 @@ simulate_smith_martin <- function(params,
     list(dy)
   }
 
-  out <- deSolve::dede(y = state0, times = times, func = rhs, parms = params)
+  out <- deSolve::dede(y = state0, times = times, func = rhs, parms = params, rtol = rtol, atol = atol, hmax = params[["delta"]])
   counts <- as.matrix(out[, paste0("N", 0:g), drop = FALSE])
   rownames(counts) <- as.character(out[, "time"])
   attr(counts, "times") <- out[, "time"]
+  if (nrow(counts) != length(times) || any(!is.finite(counts))) stop("Incomplete or nonfinite DDE solution")
+  attr(counts, "history") <- history
+  attr(counts, "legacy_survival") <- legacy_survival
   counts
 }

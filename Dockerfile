@@ -19,6 +19,8 @@ COPY . .
 
 RUN printf 'CRAN_REPO=%s\n' "$CRAN_REPO" > .Renviron \
     && Rscript tools/setup-r-packages.R \
-    && Rscript tools/check-project.R
+    && R CMD INSTALL . \
+    && Rscript tools/check-project.R \
+    && Rscript scripts/run_model.R examples/reproducible_run.json /tmp/tcell-repro
 
 CMD ["Rscript", "tools/check-project.R"]

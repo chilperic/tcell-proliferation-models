@@ -6,8 +6,7 @@ authors:
   - family-names: "Foko Kuate"
     given-names: "Chilperic Armel"
 repository-code: "https://github.com/chilperic/tcell-proliferation-models"
-version: "0.1.0"
-date-released: "2026-06-19"
+version: "0.2.0"
 references:
   - type: thesis
     title: "Reverse-engineering of T cell proliferation dynamic"
