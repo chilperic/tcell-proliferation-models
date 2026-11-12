@@ -1,10 +1,28 @@
-.Rhistory
-.RData
-.Rproj.user/
-*.Rproj
+# Operating-system and editor-generated files
 .DS_Store
-*.html
+Thumbs.db
+._*
+*~
+*.swp
+*.swo
+
+# Local credentials; sanitized examples remain versioned
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# R session state; portable .Rproj files remain versioned
+.Rhistory
+.Rapp.history
+.RData
+.Ruserdata
+.Rproj.user/
+__pycache__/
 *.log
 *.tmp
 *.bak
-__pycache__/
+
+# Disposable runs belong here; curated data, figures and reports stay tracked
+/outputs/
+/tmp/

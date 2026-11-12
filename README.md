@@ -243,3 +243,7 @@ Repository citation metadata is provided in `CITATION.cff`.
 ## License and provenance
 
 This repository includes an MIT license. The original thesis scripts are preserved for provenance in `legacy/original_R_scripts/`. Before extending or redistributing legacy components, check authorship comments in the original files.
+
+## Maintaining this repository
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the directory map, output conventions, provenance and cleanup boundaries.
