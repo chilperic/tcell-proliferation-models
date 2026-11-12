@@ -54,7 +54,7 @@ The thesis equations use different survival factors for generation zero and late
 
 ### 6. Cyton formula singularity
 
-The analytic Cyton expression divides by `theta0 - theta`. The refactor detects the near-singular case and stops with a useful error instead of silently producing unstable values.
+The historical analytic Cyton expression divides by `theta0 - theta`. The legacy backend still rejects near-singular rates. Version 0.2 defaults to the compartment ODE, which also handles equal rates; see [migration notes](MIGRATION-0.2.md).
 
 ### 7. ARE definition
 

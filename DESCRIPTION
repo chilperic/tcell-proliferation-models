@@ -1,7 +1,7 @@
 Package: tcellprolif
 Type: Package
 Title: T-Cell Proliferation Models for CFSE-Like Data
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(person("Chilperic Armel", "Foko Kuate", role = c("aut", "cre"), email = "chilpericarmel@gmail.com"))
 Description: Refactored research code for Smith-Martin and Cyton model simulations and fitting of CFSE-like T-cell proliferation count data. The repository is based on code developed for the AIMS Ghana Master's thesis "Reverse-engineering of T cell proliferation dynamic".
 License: MIT + file LICENSE
@@ -9,5 +9,6 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Depends: R (>= 4.0.0)
 Imports: deSolve
-Suggests: testthat (>= 3.0.0)
+Suggests: testthat (>= 3.0.0), jsonlite, digest
 Config/testthat/edition: 3
+Config/roxygen2/version: 8.1.0

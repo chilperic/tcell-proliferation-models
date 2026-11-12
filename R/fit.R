@@ -51,6 +51,8 @@ fit_smith_martin <- function(observed,
   lower <- normalize_smith_martin_params(lower)
   upper <- normalize_smith_martin_params(upper)
 
+  .validate_fit(observed, times, lower, upper, n_starts)
+
   objective <- function(par) {
     names(par) <- names(lower)
     predicted <- tryCatch(
@@ -72,11 +74,14 @@ fit_smith_martin <- function(observed,
   starts <- replicate(n_starts, .random_start(lower, upper), simplify = FALSE)
   fits <- lapply(starts, function(start) {
     names(start) <- names(lower)
-    stats::optim(start, objective, method = "L-BFGS-B", lower = lower, upper = upper)
+    tryCatch(stats::optim(start, objective, method = "L-BFGS-B", lower = lower, upper = upper),
+             error = function(e) list(par=start, value=Inf, convergence=99L, message=conditionMessage(e)))
   })
 
   values <- vapply(fits, `[[`, numeric(1L), "value")
-  best_index <- which.min(values)
+  converged <- vapply(fits, function(f) f$convergence == 0L && is.finite(f$value), logical(1L))
+  if (!any(converged)) stop("No optimization start converged with finite objective", call. = FALSE)
+  best_index <- which.min(ifelse(converged, values, Inf))
 
   list(
     model = "smith_martin",
@@ -111,6 +116,8 @@ fit_cyton <- function(observed,
   lower <- normalize_cyton_params(lower)
   upper <- normalize_cyton_params(upper)
 
+  .validate_fit(observed, times, lower, upper, n_starts)
+
   objective <- function(par) {
     names(par) <- names(lower)
     predicted <- tryCatch(
@@ -131,11 +138,14 @@ fit_cyton <- function(observed,
   starts <- replicate(n_starts, .random_start(lower, upper), simplify = FALSE)
   fits <- lapply(starts, function(start) {
     names(start) <- names(lower)
-    stats::optim(start, objective, method = "L-BFGS-B", lower = lower, upper = upper)
+    tryCatch(stats::optim(start, objective, method = "L-BFGS-B", lower = lower, upper = upper),
+             error = function(e) list(par=start, value=Inf, convergence=99L, message=conditionMessage(e)))
   })
 
   values <- vapply(fits, `[[`, numeric(1L), "value")
-  best_index <- which.min(values)
+  converged <- vapply(fits, function(f) f$convergence == 0L && is.finite(f$value), logical(1L))
+  if (!any(converged)) stop("No optimization start converged with finite objective", call. = FALSE)
+  best_index <- which.min(ifelse(converged, values, Inf))
 
   list(
     model = "cyton",

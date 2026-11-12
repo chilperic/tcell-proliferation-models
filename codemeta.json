@@ -1,0 +1,19 @@
+{
+  "@context": "https://w3id.org/codemeta/3.0",
+  "@type": "SoftwareSourceCode",
+  "name": "T-cell proliferation models",
+  "codeRepository": "https://github.com/chilperic/tcell-proliferation-models",
+  "version": "0.2.0",
+  "description": "T-cell proliferation models; see docs/MIGRATION-0.2.md for numerical changes and validation limits.",
+  "programmingLanguage": "R",
+  "license": "https://spdx.org/licenses/MIT",
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Chilperic Armel",
+      "familyName": "Foko Kuate"
+    }
+  ],
+  "issueTracker": "https://github.com/chilperic/tcell-proliferation-models/issues",
+  "developmentStatus": "https://www.repostatus.org/#active"
+}

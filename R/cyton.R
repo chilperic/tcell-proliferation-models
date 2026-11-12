@@ -9,7 +9,10 @@ normalize_cyton_params <- function(params) {
   if (length(missing) > 0L) {
     stop("Missing Cyton parameter(s): ", paste(missing, collapse = ", "), call. = FALSE)
   }
-  params[required]
+  params <- params[required]
+  if (any(!is.finite(params)) || any(params[c("f0", "f1")] < 0) || any(params[c("f0", "f1")] > 1) || any(params[c("mu0d", "mud", "mu0p", "mup")] <= 0))
+    stop("Cyton fractions must be in [0, 1] and mean waiting times positive", call. = FALSE)
+  params
 }
 
 .cyton_check_singularity <- function(theta0, theta, tolerance) {
@@ -102,15 +105,22 @@ normalize_cyton_params <- function(params) {
 #'   `theta0 == theta`.
 #' @param clip_negative If `TRUE`, very small negative values produced by floating
 #'   point cancellation are clipped to zero.
+#' @param method ode uses the exponential competing-risk compartment system; legacy uses the historical analytic formula.
+#' @param rtol Relative solver tolerance.
+#' @param atol Absolute solver tolerance.
 #' @return Numeric matrix with generation counts as columns.
 simulate_cyton <- function(params,
                            times = seq(0, 120, by = 12),
                            initial_cells = 50000,
                            max_generation = 20,
                            tolerance = 1e-10,
-                           clip_negative = TRUE) {
+                           clip_negative = TRUE, method = c("ode", "legacy"),
+                           rtol = 1e-8, atol = 1e-8) {
   params <- normalize_cyton_params(params)
-  times <- sort(unique(as.numeric(times)))
+  times <- .validate_times(times)
+  .validate_initial(max_generation, initial_cells)
+  method <- match.arg(method)
+  if (method == "ode") return(.cyton_ode(params, times, initial_cells, max_generation, rtol, atol))
   g <- as.integer(max_generation)
 
   values <- vapply(0:g, function(n) {
@@ -129,4 +139,33 @@ simulate_cyton <- function(params,
 
   attr(values, "times") <- times
   values
+}
+
+
+# Exponential waiting times give two Markov compartments per generation:
+# committed proliferators P and nondividers Q. Death applies to both.
+.cyton_ode <- function(params, times, initial_cells, g, rtol, atol) {
+  if (!is.finite(rtol) || rtol <= 0 || !is.finite(atol) || atol <= 0) stop("Positive finite tolerances required")
+  width <- g + 1L
+  state <- numeric(2L * width)
+  state[1L] <- initial_cells * params[["f0"]]
+  state[width + 1L] <- initial_cells * (1 - params[["f0"]])
+  division <- c(1 / params[["mu0p"]], rep(1 / params[["mup"]], g))
+  death <- c(1 / params[["mu0d"]], rep(1 / params[["mud"]], g))
+  rhs <- function(t, y, parms) {
+    p <- y[seq_len(width)]
+    q <- y[width + seq_len(width)]
+    births <- c(0, 2 * division[seq_len(g)] * p[seq_len(g)])
+    list(c(params[["f1"]] * births - (division + death) * p,
+           (1 - params[["f1"]]) * births - death * q))
+  }
+  out <- deSolve::ode(state, times, rhs, parms = NULL, rtol = rtol, atol = atol)
+  counts <- out[, 1L + seq_len(width), drop = FALSE] + out[, 1L + width + seq_len(width), drop = FALSE]
+  if (nrow(counts) != length(times) || any(!is.finite(counts)) || any(counts < -10 * atol))
+    stop("Incomplete, nonfinite or negative Cyton solution", call. = FALSE)
+  colnames(counts) <- paste0("N", 0:g)
+  rownames(counts) <- as.character(times)
+  attr(counts, "times") <- times
+  attr(counts, "method") <- "exponential-competing-risks-ode"
+  counts
 }

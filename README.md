@@ -11,7 +11,7 @@ This repository contains R implementations for simulating and fitting mathematic
 The repository focuses on two model classes used in the thesis:
 
 * **Smith-Martin model** — generation-structured proliferation with delayed division dynamics.
-* **Cyton model** — analytic proliferation model using exponential waiting-time assumptions for division and death.
+* **Cyton model** — exponential competing-risk model, with a stable ODE backend and a preserved legacy analytic backend.
 
 The original thesis scripts are preserved in `legacy/original_R_scripts/`. The reusable implementation is organized in `R/`.
 
@@ -65,7 +65,7 @@ flowchart TD
 | --------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | Data layer            | `R/cfse_data.R`                              | Reads CFSE-like generation-count files and converts raw columns into model-ready matrices. |
 | Smith-Martin model    | `R/smith_martin.R`                           | Simulates generation-structured T-cell proliferation with delayed division dynamics.       |
-| Cyton model           | `R/cyton.R`                                  | Simulates the analytic Cyton model under exponential waiting-time assumptions.             |
+| Cyton model           | `R/cyton.R`                                  | Simulates exponential competing risks; supports the legacy analytic formula explicitly.             |
 | Fitting layer         | `R/fit.R`                                    | Provides utilities for fitting model parameters to observed generation-count data.         |
 | Metrics layer         | `R/metrics.R`                                | Computes error measures such as SSD and average relative error.                            |
 | Plotting layer        | `R/plot.R`                                   | Provides plotting helpers for model output and diagnostics.                                |
@@ -243,3 +243,11 @@ Repository citation metadata is provided in `CITATION.cff`.
 ## License and provenance
 
 This repository includes an MIT license. The original thesis scripts are preserved for provenance in `legacy/original_R_scripts/`. Before extending or redistributing legacy components, check authorship comments in the original files.
+
+## Maintaining this repository
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the directory map, output conventions, provenance and cleanup boundaries.
+
+## Reproducible 0.2 workflow
+
+See [reproduction instructions](docs/REPRODUCING.md), [scientific migration notes](docs/MIGRATION-0.2.md), and the [FAIR implementation record](docs/FAIR.md). Numerical reliability checks do not substitute for empirical validation.

@@ -1,0 +1,147 @@
+{
+  "schema_version": "1.0",
+  "source_commit": "81bb4aef9d82ecf8764d422be6176470fc630a76",
+  "files": [
+    {
+      "path": "data/synthetic_cfse/agent_based_sim_output_1.txt",
+      "sha256": "7c6d9691480e607478b98a93e3e1d491105b4722aabd80b99b60f59f422a2eef",
+      "bytes": 1811,
+      "provenance_status": "inherited from repository; original source and rights require verification",
+      "license_status": "do not infer data redistribution rights from the software license"
+    },
+    {
+      "path": "data/synthetic_cfse/agent_based_sim_output_10.txt",
+      "sha256": "c8ef4112ff887d5b250eb42a8ffafdd962eb00760cf0e2f26a16fb47a847efd4",
+      "bytes": 1880,
+      "provenance_status": "inherited from repository; original source and rights require verification",
+      "license_status": "do not infer data redistribution rights from the software license"
+    },
+    {
+      "path": "data/synthetic_cfse/agent_based_sim_output_11.txt",
+      "sha256": "178f982b08e6422be480f283ec7006260949458ad1fa52e6eacdf7c169623f8b",
+      "bytes": 2094,
+      "provenance_status": "inherited from repository; original source and rights require verification",
+      "license_status": "do not infer data redistribution rights from the software license"
+    },
+    {
+      "path": "data/synthetic_cfse/agent_based_sim_output_12.txt",
+      "sha256": "944f9d07eddfd0e712dc4b767e1a70e1509ab4bc742ec9d47d5978c76068c4ab",
+      "bytes": 1955,
+      "provenance_status": "inherited from repository; original source and rights require verification",
+      "license_status": "do not infer data redistribution rights from the software license"
+    },
+    {
+      "path": "data/synthetic_cfse/agent_based_sim_output_13.txt",
+      "sha256": "4976317c0faf90579467c87cb3cd3a0e2f2ec9c622eb77f842e96081b0220523",
+      "bytes": 1962,
+      "provenance_status": "inherited from repository; original source and rights require verification",
+      "license_status": "do not infer data redistribution rights from the software license"
+    },
+    {
+      "path": "data/synthetic_cfse/agent_based_sim_output_14.txt",
+      "sha256": "1d5a01c2c6a40e12af205fb0e5dedb56945391075dc5baffa64fa4c84b059191",
+      "bytes": 1920,
+      "provenance_status": "inherited from repository; original source and rights require verification",
+      "license_status": "do not infer data redistribution rights from the software license"
+    },
+    {
+      "path": "data/synthetic_cfse/agent_based_sim_output_15.txt",
+      "sha256": "03826f10725f9ec9ebfc96bf959d0a46fb83d24a0c8452b4c629cfa3e407ff40",
+      "bytes": 1837,
+      "provenance_status": "inherited from repository; original source and rights require verification",
+      "license_status": "do not infer data redistribution rights from the software license"
+    },
+    {
+      "path": "data/synthetic_cfse/agent_based_sim_output_16.txt",
+      "sha256": "347732182d172ce31c525d504e175faa116c6c4d022ba856e3954fd40801d995",
+      "bytes": 1862,
+      "provenance_status": "inherited from repository; original source and rights require verification",
+      "license_status": "do not infer data redistribution rights from the software license"
+    },
+    {
+      "path": "data/synthetic_cfse/agent_based_sim_output_17.txt",
+      "sha256": "7ec27e6dfcecfa9648d6ac67250382b0b266f9b30b0947315d990f6335813f19",
+      "bytes": 1949,
+      "provenance_status": "inherited from repository; original source and rights require verification",
+      "license_status": "do not infer data redistribution rights from the software license"
+    },
+    {
+      "path": "data/synthetic_cfse/agent_based_sim_output_18.txt",
+      "sha256": "d41c940cb9d41ca86e79133795b8c1499fb7a3cce2d2db0aa9128f1a988e6602",
+      "bytes": 1965,
+      "provenance_status": "inherited from repository; original source and rights require verification",
+      "license_status": "do not infer data redistribution rights from the software license"
+    },
+    {
+      "path": "data/synthetic_cfse/agent_based_sim_output_19.txt",
+      "sha256": "b8a0f5d2b4999d53aca0a14f16418bd2d6736d140c5a2065d1d29a31ff188938",
+      "bytes": 2035,
+      "provenance_status": "inherited from repository; original source and rights require verification",
+      "license_status": "do not infer data redistribution rights from the software license"
+    },
+    {
+      "path": "data/synthetic_cfse/agent_based_sim_output_2.txt",
+      "sha256": "85001f51609781edd305e2dc9752f1307aa5e68afe2a5293ea345c94c888cac9",
+      "bytes": 1821,
+      "provenance_status": "inherited from repository; original source and rights require verification",
+      "license_status": "do not infer data redistribution rights from the software license"
+    },
+    {
+      "path": "data/synthetic_cfse/agent_based_sim_output_20.txt",
+      "sha256": "230bacfb2cb2a9f7bc792a8361cf7e143a1a70d6d67500250f6009e970d4e7ef",
+      "bytes": 1884,
+      "provenance_status": "inherited from repository; original source and rights require verification",
+      "license_status": "do not infer data redistribution rights from the software license"
+    },
+    {
+      "path": "data/synthetic_cfse/agent_based_sim_output_3.txt",
+      "sha256": "715237efe3577285733758b730e2b858b90ce282e0c148c897459d6785482883",
+      "bytes": 1968,
+      "provenance_status": "inherited from repository; original source and rights require verification",
+      "license_status": "do not infer data redistribution rights from the software license"
+    },
+    {
+      "path": "data/synthetic_cfse/agent_based_sim_output_4.txt",
+      "sha256": "2f56372dd0a42f7cd9ed30ae8c69fd8c002e02573b49d729fb89d05ce5e37d1b",
+      "bytes": 1865,
+      "provenance_status": "inherited from repository; original source and rights require verification",
+      "license_status": "do not infer data redistribution rights from the software license"
+    },
+    {
+      "path": "data/synthetic_cfse/agent_based_sim_output_5.txt",
+      "sha256": "fab58f5b317f89022d1576f19d946c564ed1164ed36d1af2d6c0bbc0826ae106",
+      "bytes": 1948,
+      "provenance_status": "inherited from repository; original source and rights require verification",
+      "license_status": "do not infer data redistribution rights from the software license"
+    },
+    {
+      "path": "data/synthetic_cfse/agent_based_sim_output_6.txt",
+      "sha256": "bd24f3b84f084c8dace9b7c6cfb752df2d6b09ef978d19e31e7cb371efa2e789",
+      "bytes": 2003,
+      "provenance_status": "inherited from repository; original source and rights require verification",
+      "license_status": "do not infer data redistribution rights from the software license"
+    },
+    {
+      "path": "data/synthetic_cfse/agent_based_sim_output_7.txt",
+      "sha256": "325cf8a567c4b8f2dd283d65ec5e3a54b6bf515cfb99f12124acaaee0dedd167",
+      "bytes": 1846,
+      "provenance_status": "inherited from repository; original source and rights require verification",
+      "license_status": "do not infer data redistribution rights from the software license"
+    },
+    {
+      "path": "data/synthetic_cfse/agent_based_sim_output_8.txt",
+      "sha256": "4dc9f65ccfef78845ee34095260cf9794e5a0b56f824f35f2540b7b8472a370d",
+      "bytes": 1993,
+      "provenance_status": "inherited from repository; original source and rights require verification",
+      "license_status": "do not infer data redistribution rights from the software license"
+    },
+    {
+      "path": "data/synthetic_cfse/agent_based_sim_output_9.txt",
+      "sha256": "66faa611cd279d12818a5adcfe9c9ebe504879a5379158576ed787766389889e",
+      "bytes": 1867,
+      "provenance_status": "inherited from repository; original source and rights require verification",
+      "license_status": "do not infer data redistribution rights from the software license"
+    }
+  ],
+  "note": "Checksums preserve input identity, not scientific correctness. Original data remain unchanged."
+}

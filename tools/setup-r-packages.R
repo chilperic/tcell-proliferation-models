@@ -8,7 +8,7 @@
 repo <- Sys.getenv("CRAN_REPO", unset = getOption("repos")[["CRAN"]])
 options(repos = c(CRAN = repo))
 
-required <- c("deSolve", "testthat")
+required <- c("deSolve", "testthat", "jsonlite", "digest")
 installed <- rownames(installed.packages())
 missing <- setdiff(required, installed)
 
@@ -17,7 +17,7 @@ cat("CRAN repository:", getOption("repos")[["CRAN"]], "\n")
 
 if (length(missing) > 0L) {
   cat("Installing missing packages:", paste(missing, collapse = ", "), "\n")
-  install.packages(missing, dependencies = TRUE)
+  install.packages(missing, dependencies = NA)
 } else {
   cat("All required packages already installed.\n")
 }
